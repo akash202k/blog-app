@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn{
+  @apply py-2 px-4 rounded-md font-semibold text-black bg-slate-300 hover:bg-slate-600 hover:text-white hover:scale-105 transition
+} 
+
+.cbtn{
+  @apply py-1 px-2 text-sm rounded-md font-semibold text-white bg-slate-700 hover:bg-slate-300 hover:text-black transition
+} 
+
+h1{
+  @apply text-2xl font-bold 
+}
+
+.editbtn{
+  @apply ml-3 px-4 py-2 text-green-800 bg-slate-300 w-fit font-bold rounded-md hover:bg-green-800/75 hover:text-slate-200 transition 
+}
+
+.deletebtn{
+  @apply ml-3 px-4 py-2 text-red-800 bg-slate-300 w-fit font-bold rounded-md hover:bg-red-800/75 hover:text-slate-200 transition 
+}
+
+input {
+  @apply w-full border-2 px-1 py-2 rounded-md
+}
