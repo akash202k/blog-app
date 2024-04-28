@@ -3,8 +3,11 @@ import NextAuth from "next-auth/next";
 
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "@/app/lib/prismadb";
 
 export const authOptions: AuthOptions = {
+    adapter: PrismaAdapter(prisma),
     providers: [
         Github({
             clientId: process.env.GITHUB_CLIENT_ID as string,

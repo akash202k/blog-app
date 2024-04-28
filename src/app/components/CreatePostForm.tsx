@@ -1,10 +1,12 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { categoriesData } from "@/data"
 import { link } from 'fs';
 import Link from 'next/link';
-
+import axios from 'axios';
+import { TCategory } from '../lib/types';
+import { useRouter } from 'next/navigation';
 
 interface categoryDataType {
     id: string,
@@ -12,9 +14,30 @@ interface categoryDataType {
 }
 
 function CreatePostForm() {
+    const router = useRouter();
 
     const [links, setLinks] = useState<string[]>([]);
     const [inputLink, setInputLink] = useState<string>("");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [categories, setCategories] = useState<TCategory[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+    const [publicId, setPublicId] = useState("");
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchAllCategories = async () => {
+            const res = await fetch("api/categories");
+            const catNames = await res.json();
+            setCategories(catNames)
+            return
+        }
+
+        fetchAllCategories();
+    }, [])
+
+
 
     function addLink(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.preventDefault();
@@ -29,13 +52,47 @@ function CreatePostForm() {
         setLinks((prev) => prev.filter((_, i) => i != index));
     }
 
+    async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        if (!title && !content) {
+            setError("* Title and Content are required")
+        }
+        const formData = {
+            title: title,
+            content: content,
+            links: links,
+            categories: selectedCategories,
+            imageUrl: "https://images.pexels.com/photos/1616516/pexels-photo-1616516.jpeg",
+            publicId: "123",
+
+        }
+
+        try {
+            const res = await fetch("api/posts", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            console.log(res);
+
+            if (res.ok) {
+                router.push("/dashboard");
+            }
+        } catch (error) {
+            return error;
+        }
+    }
+
 
     return (
         <div>
             <h1>Create Post</h1>
-            <form className='py-3 space-y-4 '>
-                <input type="text" placeholder='Title' />
-                <textarea placeholder={"Content "} className='w-full h-40 border-2 px-1 py-2 rounded-md'></textarea>
+            <form onSubmit={handleFormSubmit} className='py-3 space-y-4 '>
+                <input onChange={(e) => setTitle(e.target.value)} type="text" placeholder='Title' />
+                <textarea onChange={(e) => setContent(e.target.value)} placeholder={"Content "} className='w-full h-40 border-2 px-1 py-2 rounded-md'></textarea>
 
 
                 {
@@ -75,17 +132,17 @@ function CreatePostForm() {
 
                 </div>
 
-                <select className='px-3 py-2 w-full border-2 items-center rounded-md appearance-none'>
+                <select onChange={(e) => setSelectedCategories(e.target.value)} className='px-3 py-2 w-full border-2 items-center rounded-md appearance-none'>
                     <option value="">Select A Category</option>
-                    {categoriesData && categoriesData.map((category: categoryDataType) => (
-                        <option key={category.id} value={category.name}>
-                            {category.name}
+                    {categories && categories.map((category: TCategory) => (
+                        <option key={category.id} value={category.catName}>
+                            {category.catName}
                         </option>
                     ))}
                 </select>
 
-                <button className='p-3 border-2 w-full rounded-md bg-slate-700 text-white hover:bg-slate-900 '>Create Post</button>
-                <div className=' text-red-600 p-2 '>Error Message</div>
+                <button type='submit' className='p-3 border-2 w-full rounded-md bg-slate-700 text-white hover:bg-slate-900 '>Create Post</button>
+                {error && <div className=' text-red-600 p-2 '>{error}</div>}
             </form>
         </div>
     )
