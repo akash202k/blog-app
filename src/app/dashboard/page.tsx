@@ -1,32 +1,48 @@
-import { postData } from "@/data";
 import CategoriesList from "../components/CategoriesList";
 import Post from "../components/Post";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { TPost } from "../lib/types";
 
+const getUserPosts = async (email: string) => {
+
+    try {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/author/${email}`);
+        if (res.ok) {
+            const { posts } = await res.json();
+            return posts;
+        }
+    } catch (error) {
+        return []
+    }
+}
 
 export default async function Dashboard() {
 
     const session = await getServerSession(authOptions);
+    const email = session?.user?.email;
+    let posts = [];
     if (!session) {
         redirect("/signin");
-
     }
 
+    if (email) {
+        posts = await getUserPosts(email)
+    }
 
     return (
         <div>
             <h1 className="mb-4">My Post</h1>
-            {postData && postData.length > 0 ? (postData.map((post) => <Post
+            {posts && posts.length > 0 ? (posts.map((post: TPost) => <Post
                 key={post.id}
                 id={post.id}
-                author={post.author}
-                authorEmail={"test@gmail.com"}
-                date={post.datepublished}
-                thumbnail={post.thumbnail}
-                category={post.category}
+                author={session.user?.name as string}
+                authorEmail={post.authorEmail}
+                date={post.createdAt}
+                thumbnail={post.imageUrl}
+                category={post.catName}
                 title={post.title}
                 content={post.content}
                 links={post.links || []}

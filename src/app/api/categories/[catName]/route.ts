@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: { catName: str
             }
         })
 
-        console.log(posts);
+        // console.log(posts);
         return NextResponse.json(posts);
 
     } catch (error) {

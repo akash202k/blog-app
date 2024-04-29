@@ -6,7 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function GET(req: Request, { params }: { params: { postid: string } }) {
 
-    console.log(params.postid);
+    // console.log(params.postid);
     const id = params.postid;
 
     try {
@@ -83,13 +83,14 @@ export async function DELETE(req: NextRequest, { params }: { params: { postid: s
         }, { status: 401 })
     }
 
+    // console.log(params.postid);
     const id = params.postid;
     try {
 
         const delPost = await prisma.post.delete({
             where: { id }
         })
-        console.log(delPost);
+        // console.log(delPost);
         return NextResponse.json({
             message: "Your post deleted"
         })

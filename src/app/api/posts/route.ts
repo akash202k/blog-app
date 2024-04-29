@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
             error: "User not authenticated"
         }, { status: 401 })
     }
-    const { title, content, links, selectedCategories, imageUrl, publicId } = await req.json();
+    const { title, content, links, category, imageUrl, publicId } = await req.json();
     const authorEmail = session.user?.email as string
 
     if (!title || !content) {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
             links,
             imageUrl,
             publicId,
-            catName: selectedCategories,
+            catName: category,
             authorEmail
         }
         const newPost = await prisma.post.create({
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
         })
 
         console.log("New Post Created");
+        // console.log(postData);
         return NextResponse.json(newPost);
 
     } catch (error) {

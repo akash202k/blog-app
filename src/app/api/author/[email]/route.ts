@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, { params }: { params: { email: strin
             }
         })
 
-        console.log(posts);
+        // console.log(posts);
         return NextResponse.json(posts);
 
     } catch (error) {

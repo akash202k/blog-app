@@ -86,7 +86,7 @@ export default async function Post({
 
             {isEditable && (<div className="mt-5">
                 <Link className="editbtn" href={`/edit-post/${id}`}>Edit</Link>
-                <span className="deletebtn"><DeleteButton /></span>
+                <span className="deletebtn"><DeleteButton id={id} /></span>
             </div>)}
 
             <div className="border m-8"></div>

@@ -1,7 +1,34 @@
+"use client"
 
 
-export default function DeleteButton() {
+
+export default function DeleteButton({ id }: { id: string }) {
+
+    const handleDelete = async () => {
+        const confirmed = window.confirm("This action will delete post permanantly !");
+        if (confirmed) {
+            try {
+                // console.log(id);
+                const res = await fetch(`/api/posts/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+
+                })
+                if (res.ok) {
+                    console.log("Post Deleted Successfully");
+
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+
+        }
+    }
+
     return (
-        <button>Delete</button>
+        <button onClick={handleDelete}>Delete</button>
     )
 }

@@ -62,7 +62,7 @@ function CreatePostForm() {
             title: title,
             content: content,
             links: links,
-            categories: selectedCategories,
+            category: selectedCategories,
             imageUrl: "https://images.pexels.com/photos/1616516/pexels-photo-1616516.jpeg",
             publicId: "123",
 
@@ -76,7 +76,7 @@ function CreatePostForm() {
                 },
                 body: JSON.stringify(formData)
             })
-            console.log(res);
+            // console.log(res);
 
             if (res.ok) {
                 router.push("/dashboard");
@@ -132,7 +132,10 @@ function CreatePostForm() {
 
                 </div>
 
-                <select onChange={(e) => setSelectedCategories(e.target.value)} className='px-3 py-2 w-full border-2 items-center rounded-md appearance-none'>
+                <select onChange={(e) => {
+                    // console.log(e.target.value);
+                    setSelectedCategories(e.target.value)
+                }} className='px-3 py-2 w-full border-2 items-center rounded-md appearance-none'>
                     <option value="">Select A Category</option>
                     {categories && categories.map((category: TCategory) => (
                         <option key={category.id} value={category.catName}>
