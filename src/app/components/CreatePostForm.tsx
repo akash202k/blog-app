@@ -7,6 +7,8 @@ import Link from 'next/link';
 import axios from 'axios';
 import { TCategory } from '../lib/types';
 import { useRouter } from 'next/navigation';
+import { CldUploadButton, CloudinaryUploadWidgetResults } from "next-cloudinary";
+import Image from 'next/image';
 
 interface categoryDataType {
     id: string,
@@ -39,7 +41,7 @@ function CreatePostForm() {
 
 
 
-    function addLink(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    function addLink(e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLButtonElement>) {
         e.preventDefault();
         if (inputLink.trim() !== "") {
             setLinks((prev) => [...prev, inputLink]);
@@ -52,6 +54,27 @@ function CreatePostForm() {
         setLinks((prev) => prev.filter((_, i) => i != index));
     }
 
+    function handleImageUpload(result: CloudinaryUploadWidgetResults) {
+
+        // console.log("result", result);
+        const event = result.event;
+        const info = result.info as object;
+
+        // console.log("event", JSON.stringify(event));
+        // console.log("info", JSON.stringify(info));
+
+        if ("secure_url" in info && "public_id" in info) {
+            const url = info.secure_url as string;
+            const public_id = info.public_id as string;
+            console.log("url", url);
+            console.log("public_id", public_id);
+            setImageUrl(url);
+            setPublicId(public_id);
+        }
+
+
+    }
+
     async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -59,12 +82,12 @@ function CreatePostForm() {
             setError("* Title and Content are required")
         }
         const formData = {
-            title: title,
-            content: content,
-            links: links,
+            title,
+            content,
+            links,
             category: selectedCategories,
-            imageUrl: "https://images.pexels.com/photos/1616516/pexels-photo-1616516.jpeg",
-            publicId: "123",
+            imageUrl,
+            publicId,
 
         }
 
@@ -86,6 +109,26 @@ function CreatePostForm() {
         }
     }
 
+    async function handleRemoveImage(e: React.FormEvent) {
+        e.preventDefault()
+        try {
+            const res = await fetch("/api/remove-image", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application.json"
+                },
+                body: JSON.stringify({ publicId })
+
+            })
+            if (res.ok) {
+                setImageUrl("");
+                setPublicId("");
+
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div>
@@ -116,10 +159,54 @@ function CreatePostForm() {
                     )
                 }
 
+                <CldUploadButton
+                    className={`h-40 w-full bg-slate-100 grid place-content-center border-2 border-black/25 border-dotted rounded-md relative ${imageUrl && "pointer-events-none "}`}
+                    onUpload={handleImageUpload}
+                    uploadPreset="puiuyatm"
+
+                >
+                    <div >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+
+
+                    </div>
+                    {imageUrl && (
+                        <Image
+                            alt='cover image'
+                            fill
+                            className="absolute object-cover insert-0"
+                            src={imageUrl} />)}
+
+                </CldUploadButton>
+
+
+                {
+                    publicId &&
+                    (<div>
+                        <button
+                            className='px-3 py-2 bg-red-500 border-2 text-white hover:bg-red-700 rounded-md'
+                            onClick={handleRemoveImage}
+                        >
+                            Remove Image
+                        </button>
+                    </div>)
+                }
+
 
                 <div className='flex gap-5'>
                     <input type="text" placeholder='Enter your link here' onChange={e => setInputLink(e.target.value)} value={inputLink} />
-                    <button className='btn flex items-center gap-2' onClick={addLink}>
+                    <button
+                        className='btn flex items-center gap-2'
+                        onClick={addLink}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault(); // Prevent form submission
+                                addLink(e); // Trigger addLink function
+                            }
+                        }}
+                    >
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

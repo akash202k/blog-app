@@ -37,13 +37,13 @@ export default async function Post({
         day: "numeric",
         year: "numeric"
     }
-    const formatedDated = dateObject.toLocaleDateString('en-IN', options)
+    const formatedDate = dateObject.toLocaleDateString('en-IN', options)
 
 
     return (
         <div>
             <div>
-                Posted By : <span className="font-bold ">{author}</span> on <span>{formatedDated}</span>
+                Posted By : <span className="font-bold ">{author}</span> on <span>{formatedDate}</span>
             </div>
 
             <div className="w-full h-72 relative">
@@ -64,7 +64,7 @@ export default async function Post({
                 )}
             </div>
 
-            <button className="cbtn mt-3 ml-2">{category}</button>
+            {category && <div className="mt-3"><Link href={`/categories/${category}`} className="cbtn  ml-2">{category}</Link></div>}
             <h1 className="text-2xl font-bold m-3 ">{title}</h1>
             <p className="m-3">{content}</p>
             <div className="flex flex-col gap-3 text-blue-900/75 hover:underline">
