@@ -1,5 +1,5 @@
 
-import { authOptions } from "@/app/api/auth/route"
+import { authOptions } from "@/app/lib/auth/route"
 import NextAuth, { AuthOptions } from "next-auth";
 
 

@@ -3,7 +3,7 @@ import Post from "../components/Post";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/route"
+import { authOptions } from "@/app/lib/auth/route"
 import { TPost } from "../lib/types";
 
 const getUserPosts = async (email: string) => {
