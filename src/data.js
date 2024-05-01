@@ -1,5 +1,5 @@
 
-export const postData = [
+export const postspostData = [
     {
         id: "1",
         title: "New Smartphone Model Released",
