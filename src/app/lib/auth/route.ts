@@ -3,11 +3,11 @@ import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/app/lib/prismadb";
-import { AuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 
 
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
         Github({

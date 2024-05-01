@@ -1,6 +1,6 @@
 
 import { authOptions } from "@/app/lib/auth/route"
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 
 
 
