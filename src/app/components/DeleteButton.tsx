@@ -1,8 +1,10 @@
 "use client"
+import { useRouter } from "next/navigation";
 
 
 
 export default function DeleteButton({ id }: { id: string }) {
+    const router = useRouter();
 
     const handleDelete = async () => {
         const confirmed = window.confirm("This action will delete post permanantly !");
@@ -18,6 +20,8 @@ export default function DeleteButton({ id }: { id: string }) {
                 })
                 if (res.ok) {
                     console.log("Post Deleted Successfully");
+                    router.push("/dashboard");
+                    router.refresh();
 
                 }
             } catch (error) {

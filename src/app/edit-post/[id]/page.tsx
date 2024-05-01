@@ -1,6 +1,6 @@
 import EditPostForm from "@/app/components/EditPostForm";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/route"
 import { redirect } from "next/navigation";
 import { TPost } from "@/app/lib/types";
 

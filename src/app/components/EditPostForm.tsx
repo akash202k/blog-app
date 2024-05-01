@@ -1,7 +1,6 @@
 "use client"
 
 import React, { cache, use, useEffect, useState } from 'react'
-import { categoriesData } from "@/data"
 import { link } from 'fs';
 import Link from 'next/link';
 import axios from 'axios';
@@ -95,6 +94,7 @@ function EditPostForm({ post }: { post: TPost }) {
 
             if (res.ok) {
                 router.push(`/dashboard`);
+                router.refresh();
             }
         } catch (error) {
             return error;

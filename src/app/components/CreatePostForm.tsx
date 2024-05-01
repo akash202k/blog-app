@@ -2,13 +2,13 @@
 
 import React, { use, useEffect, useState } from 'react'
 import { categoriesData } from "@/data"
-import { link } from 'fs';
 import Link from 'next/link';
 import axios from 'axios';
 import { TCategory } from '../lib/types';
 import { useRouter } from 'next/navigation';
 import { CldUploadButton, CloudinaryUploadWidgetResults } from "next-cloudinary";
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 interface categoryDataType {
     id: string,
@@ -26,7 +26,6 @@ function CreatePostForm() {
     const [selectedCategories, setSelectedCategories] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [publicId, setPublicId] = useState("");
-    const [error, setError] = useState("");
 
     useEffect(() => {
         const fetchAllCategories = async () => {
@@ -79,7 +78,8 @@ function CreatePostForm() {
         e.preventDefault();
 
         if (!title && !content) {
-            setError("* Title and Content are required")
+            // setError("* Title and Content are required");
+            toast.error("Title and Content are required");
         }
         const formData = {
             title,
@@ -102,6 +102,7 @@ function CreatePostForm() {
             // console.log(res);
 
             if (res.ok) {
+                toast.success("Post Created Successfully");
                 router.push("/dashboard");
             }
         } catch (error) {
@@ -186,7 +187,7 @@ function CreatePostForm() {
                     publicId &&
                     (<div>
                         <button
-                            className='px-3 py-2 bg-red-500 border-2 text-white hover:bg-red-700 rounded-md'
+                            className='px-3 py-2 bg-red-500 border-2 font-bold text-white hover:bg-red-700 rounded-md'
                             onClick={handleRemoveImage}
                         >
                             Remove Image
@@ -231,8 +232,7 @@ function CreatePostForm() {
                     ))}
                 </select>
 
-                <button type='submit' className='p-3 border-2 w-full rounded-md bg-slate-700 text-white hover:bg-slate-900 '>Create Post</button>
-                {error && <div className=' text-red-600 p-2 '>{error}</div>}
+                <button type='submit' className='p-3 border-2 font-bold w-full rounded-md bg-slate-700 text-white hover:bg-slate-900 '>Create Post</button>
             </form>
         </div>
     )

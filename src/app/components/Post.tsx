@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import DeleteButton from "./DeleteButton";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/route"
 
 interface PostProps {
     id: string,
@@ -77,9 +77,9 @@ export default async function Post({
                             </svg>
                         </div>
 
-                        <Link className="max-w-full  overflow-hidden text-ellipsis" href={`${link}`}>
+                        <a className="max-w-full  overflow-hidden text-ellipsis" target="blank" href={`https://${link}`}>
                             {link}
-                        </Link>
+                        </a>
                     </div>
                 )}
             </div>

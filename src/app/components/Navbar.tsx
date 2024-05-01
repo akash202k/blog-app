@@ -5,6 +5,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import LoadingBar from "react-top-loading-bar";
 
 
 export function Navbar() {
@@ -36,6 +37,8 @@ export function Navbar() {
             document.removeEventListener("click", handleClickOutside);
         }
     }, [isPoupVisible]);
+
+
 
 
 
@@ -99,6 +102,7 @@ export function Navbar() {
             </div>) : <div className="flex items-center">
                 <Link className="btn" href={"/signin"}>Sign In</Link>
             </div>} */}
+
 
 
         </div >
