@@ -1,6 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import DeleteButton from "./DeleteButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/route"
 
 interface PostProps {
     id: string,
@@ -15,7 +17,7 @@ interface PostProps {
 }
 
 
-export default function Post({
+export default async function Post({
     id,
     author,
     authorEmail,
@@ -27,11 +29,21 @@ export default function Post({
     links
 }: PostProps) {
 
-    const isEditable = true;
+    const session = await getServerSession(authOptions);
+    const isEditable = session && session.user?.email === authorEmail;
+    const dateObject = new Date(date);
+    const options: Intl.DateTimeFormatOptions = {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+    }
+    const formatedDate = dateObject.toLocaleDateString('en-IN', options)
+
+
     return (
         <div>
             <div>
-                Posted By : <span className="font-bold ">{author}</span> on <span>{date}</span>
+                Posted By : <span className="font-bold ">{author}</span> on <span>{formatedDate}</span>
             </div>
 
             <div className="w-full h-72 relative">
@@ -44,7 +56,7 @@ export default function Post({
                     />
                 ) : (
                     <Image
-                        src={"/thumbnail-placeholder.jpeg"}
+                        src={"/nopost.png"}
                         alt={title}
                         fill
                         className="object-cover rounded-md object-center"
@@ -52,7 +64,7 @@ export default function Post({
                 )}
             </div>
 
-            <button className="cbtn mt-3 ml-2">{category}</button>
+            {category && <div className="mt-3"><Link href={`/categories/${category}`} className="cbtn  ml-2">{category}</Link></div>}
             <h1 className="text-2xl font-bold m-3 ">{title}</h1>
             <p className="m-3">{content}</p>
             <div className="flex flex-col gap-3 text-blue-900/75 hover:underline">
@@ -65,16 +77,16 @@ export default function Post({
                             </svg>
                         </div>
 
-                        <Link className="max-w-full  overflow-hidden text-ellipsis" href={`${link}`}>
+                        <a className="max-w-full  overflow-hidden text-ellipsis" target="blank" href={`https://${link}`}>
                             {link}
-                        </Link>
+                        </a>
                     </div>
                 )}
             </div>
 
             {isEditable && (<div className="mt-5">
                 <Link className="editbtn" href={`/edit-post/${id}`}>Edit</Link>
-                <span className="deletebtn"><DeleteButton /></span>
+                <span className="deletebtn"><DeleteButton id={id} /></span>
             </div>)}
 
             <div className="border m-8"></div>
