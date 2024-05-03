@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import DeleteButton from "./DeleteButton";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/lib/auth/route"
+import { authOptions } from "@/app/lib/auth"
 
 interface PostProps {
     id: string,
