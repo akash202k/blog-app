@@ -6,6 +6,7 @@ import prisma from "@/app/lib/prismadb";
 import { NextAuthOptions } from "next-auth";
 
 
+//comment
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
