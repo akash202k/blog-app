@@ -18,7 +18,7 @@ export default function SigninBtn() {
             <h1>Sign In</h1>
 
 
-            <button onClick={() => signIn('github')} className="flex items-center px-6 gap-4 py-2 border rounded-full hover:bg-slate-100/75 transition">
+            {/* <button onClick={() => signIn('github')} className="flex items-center px-6 gap-4 py-2 border rounded-full hover:bg-slate-100/75 transition">
                 <span>
                     <Image
                         src={"/github.png"}
@@ -28,7 +28,7 @@ export default function SigninBtn() {
                     />
                 </span>
                 Sign In With Github
-            </button>
+            </button> */}
 
             <button onClick={() => signIn('google')} className="flex items-center px-6 gap-4 py-2 border rounded-full hover:bg-slate-100/75 transition">
                 <span>
