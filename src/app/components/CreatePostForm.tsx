@@ -69,6 +69,7 @@ function CreatePostForm() {
             console.log("public_id", public_id);
             setImageUrl(url);
             setPublicId(public_id);
+            toast.success("Image Addedd Successfully");
         }
 
 
@@ -103,7 +104,10 @@ function CreatePostForm() {
 
             if (res.ok) {
                 toast.success("Post Created Successfully");
+                router.refresh();
                 router.push("/dashboard");
+
+
             }
         } catch (error) {
             return error;
@@ -124,6 +128,7 @@ function CreatePostForm() {
             if (res.ok) {
                 setImageUrl("");
                 setPublicId("");
+                toast.success("Image Removed Successfully")
 
             }
         } catch (error) {

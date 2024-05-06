@@ -34,7 +34,7 @@ export default async function Dashboard() {
 
     return (
         <div>
-            <h1 className="mb-4">My Post</h1>
+            <h1 className="mb-4">My Posts</h1>
             {posts && posts.length > 0 ? (posts.map((post: TPost) => <Post
                 key={post.id}
                 id={post.id}
